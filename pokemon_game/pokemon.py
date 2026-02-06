@@ -16,7 +16,6 @@ class Pokemon: # abstract
         else:
             self.name = species
         
-        # Traduzi 'ataque' (atributo) para 'attack_power' para não confundir com o método 'attack'
         self.attack_power = self.level * 5 
         self.health = self.level * 10
     
@@ -25,7 +24,7 @@ class Pokemon: # abstract
         return f"{self.name} (lvl: {self.level})" 
 
 
-    def attack(self, target): # Mudei o argumento 'pokemon' para 'target' para ficar mais claro
+    def attack(self, target): 
  
         effective_attack = int(self.attack_power * random.random() * 1.3)
         target.health -= effective_attack

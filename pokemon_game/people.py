@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import random
-from pokemon import * # Imports the classes translated in the previous file
+from pokemon import *
 
 
 NAMES = [
@@ -28,7 +28,7 @@ class Person:
             self.name = random.choice(NAMES)
 
         if pokemons is None: 
-            self.pokemons = [] # Traduzi 'pokebola' para 'pokemons' (lista) para ficar mais semântico, mas pode ser 'pokeball' se preferir
+            self.pokemons = []
         else: 
             self.pokemons = pokemons
 
@@ -134,7 +134,7 @@ class Player(Person):
             pokemon = random.choice(POKEMONS)
             print(f"\n>> A wild pokemon appeared: {pokemon}")
 
-            choice = input("\nDo you want to capture the Pokemon? (y/n): ") # Changed s/n to y/n
+            choice = input("\nDo you want to capture the Pokemon? (y/n): ")
             if choice == "y":
                 if random.random() >= 0.5:
                     self.capture(pokemon)
