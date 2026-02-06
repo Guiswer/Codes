@@ -2,129 +2,128 @@
 
 import pickle
 from pokemon import *
-from pessoa import *
+from people import *
 
 
-def escolher_pokemon_inicial(player):
-    print(f"\n\t>> Hello {player}, você poderá escolher agora o Pokemon que irá lhe acompanhar nesse jornada!") 
+def choose_starter_pokemon(player):
+    print(f"\n\t>> Hello {player}, you can now choose the Pokemon that will accompany you on this journey!") 
 
-    pikachu = PokemonEletrico("Pikachu", level=1)
-    charmander = PokemonFogo("Charmander", level=1)
-    squirtle = PokemonAgua("Squirtle", level=1)
+    pikachu = ElectricPokemon("Pikachu", level=1)
+    charmander = FirePokemon("Charmander", level=1)
+    squirtle = WaterPokemon("Squirtle", level=1)
 
-    print("\n\tVocê possui 3 escolhas: \n")
+    print("\n\tYou have 3 choices: \n")
     print("\n\t1 -", pikachu)
     print("\n\t2 -", charmander)
     print("\n\t3 -", squirtle)
 
     while True:
-        escolha = input("\nEscolha o seu Pokemon: ")
+        choice = input("\nChoose your Pokemon: ")
 
-        match escolha:
+        match choice:
             case "1":
-                player.capturar(pikachu)
+                player.capture(pikachu)
                 break
 
             case "2":
-                player.capturar(charmander)
+                player.capture(charmander)
                 break
 
             case "3":
-                player.capturar(squirtle)
+                player.capture(squirtle)
                 break          
         
-        print("\n⚠️\tEscolha inválida!\n")
+        print("\n⚠️\tInvalid choice!\n")
 
     print("\n", "-" * 30)
     
 
-def salvar_jogo(player):
+def save_game(player):
     try:
-        with open("database.db", "wb") as arquivo:
-            pickle.dump(player, arquivo)
+        with open("database.db", "wb") as file:
+            pickle.dump(player, file)
     except Exception as error:
-        print("\n\n\t⚠️  Erro ao salvar o jogo ⚠️")
+        print("\n\n\t⚠️  Error saving the game ⚠️")
         print(error)
 
 
-def carregar_jogo():
+def load_game():
     try:
-        with open("database.db", "rb") as arquivo:
-            player = pickle.load(arquivo)
-            print("\nLoading feito com sucesso") 
+        with open("database.db", "rb") as file:
+            player = pickle.load(file)
+            print("\nLoading successful") 
             return player
         
-    except Exception as error:
-        print("\n\n\t Este é o primeiro load/save a ser feito... legal :D ")
+    except Exception:
+        print("\n\n\t This is the first load/save to be made... cool! :D ")
+        return None
 
 
 
 if __name__ == "__main__": 
 
-    print("\nBem-vindo ao game Pokemon RPG de terminal!") 
+    print("\nWelcome to the Pokemon RPG Terminal Game!") 
 
-    player = carregar_jogo()
+    player = load_game()
 
     if not player:
-        nome = input("\nOlá, digite o seu nome: ") 
-        player = Player(nome)
+        name = input("\nHello! Please type your name: ") 
+        player = Player(name)
 
         print(f"""
-            Olá {nome}, esse é um mundo habitado por pokemons,  a partir de agora sua missão é se tornar um mestre dos pokemons
+            Hello {name}, this is a world inhabited by Pokemons. 
+            From now on, your mission is to become a Pokemon Master!
 
-            Capture o máximo de pokemons para prosseguir e lute com seus inimigos!  
+            Capture as many Pokemons as possible to proceed and fight your enemies!  
         """)
-        player.mostrar_dinheiro()
+        player.show_money()
 
         print("\n", "-"*100)
-        if player.pokebola:
-            print("\tJá vi que você tem alguns pokemons...") 
-            player.mostrar_pokemons()
+        
+        if player.pokemons:
+            print("\tI see you already have some Pokemons...") 
+            player.show_pokemons()
         else:
-            print("\n\tVocê não tem nenhum pokemon, portanto precisa escolher um...")
-            escolher_pokemon_inicial(player)
+            print("\n\tYou don't have any Pokemons, so you need to choose one...")
+            choose_starter_pokemon(player)
 
-        print("\n\tPronto, agora que você já possui um pokemon, enfrente seu arqui-rival desde o jardim de infância Gary") 
+        print("\n\tGreat! Now that you have a Pokemon, face your childhood rival, Gary!") 
 
         print("\n", "-"*50)
-        gary = Inimigo(nome="Gary", pokemons=[PokemonAgua("Squirtle", level=1)])
-        player.batalhar(gary)
+        
+        gary = Enemy(name="Gary", pokemons=[WaterPokemon("Squirtle", level=1)])
+        player.battle(gary)
 
-        salvar_jogo(player)
+        save_game(player)
 
 
     while True:
         print(f"""
-            \nO que deseja fazer?
+            \nWhat would you like to do?
 
-            1 - Explorar o mundo
-            2 - Lutar com um inimigo
-            3 - PokeAgenda    
-            0 - Sair do game
+            1 - Explore the world
+            2 - Fight an enemy
+            3 - PokeDex (Show Pokemons)    
+            0 - Exit game
               
         """)
 
-        escolha = input("\n\tSua escolha: ")
+        choice = input("\n\tYour choice: ")
 
-        match escolha:
+        match choice:
             case "0":
+                print("Goodbye!")
                 break
             case "1": 
-                player.explorar()
-                salvar_jogo(player)
+                player.explore()
+                save_game(player)
             case "2":
-                inimigoA = Inimigo()
-                player.batalhar(inimigoA)
-                salvar_jogo(player)
+                enemy_a = Enemy()
+                player.battle(enemy_a)
+                save_game(player)
             case "3":
-                player.mostrar_pokebola()
+                player.show_pokemons()
             case _:
-                print("\n⚠️  Escolha inválida...  ⚠️")
-
-
-
-
-
-
+                print("\n⚠️  Invalid choice...  ⚠️")
 
 print()
