@@ -1,14 +1,22 @@
-import websocket
 import ssl
 import json
+import websocket
+import bitstamp.client
+import credentials
 
 
-def comprar():
-    print("Bitcoin comprado!")
+def cliente():
+    trading_client = bitstamp.client.Trading(username=credentials.USERNAME, key=credentials.KEY, key=credentials.SECRET)
 
 
-def vender():
-    print("Bitcoin vendido!")
+def comprar(quantidade):
+    trading_client = cliente()
+    trading_client.buy_market_order(quantidade)
+
+
+def vender(quantidade):
+    trading_client = cliente()
+    trading_client.sell_market_order(quantidade)
 
 
 def ao_abrir(ws):
@@ -30,27 +38,19 @@ def ao_fechar(ws):
     print("Fechou a conexão!")
 
 
-def erro(ws):
-    print("Houve um erro")
-    print(erro)
+def erro(ws, erro):
+    print("Houve um erro: ", erro)
 
 
-def ao_receber_mensagem(ws, message):
-    data_json = json.loads(message)
+def ao_receber_mensagem(ws, mensagem):
+    mensagem = json.loads(mensagem)
 
-    # Verificamos se o evento é um "trade" antes de tentar pegar o preço
-    if data_json["event"] == "trade":
-        price = data_json["data"]["price"]
-        print(f"Preço BTC/USD: {price}")
-    else:
-        print(f"Mensagem do sistema: {data_json['event']}")
-    
-    if price > 9000:
+    price = mensagem['data']['price']
+
+    if price > 10000:
         vender()
-
     elif price < 8000:
         comprar()
-    
     else:
         print("Aguardar")
 
